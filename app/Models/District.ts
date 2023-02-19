@@ -1,6 +1,6 @@
 import CamelCaseNamingStrategy from '../../start/CamelCaseNamingStrategy'
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, column, scope } from '@ioc:Adonis/Lucid/Orm'
 
 export default class District extends BaseModel {
   public static namingStrategy = new CamelCaseNamingStrategy()
@@ -32,6 +32,11 @@ export default class District extends BaseModel {
   /**
    * * Hooks
    */
+
+  public static search = scope((query, city: string) => {
+    console.log(city)
+    query.where('city', 'ILIKE', `%${city.toLowerCase()}%`)
+  })
 
   @beforeSave()
   public static async propertiesToLowerCase(item: District) {

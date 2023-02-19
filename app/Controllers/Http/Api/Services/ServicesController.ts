@@ -14,9 +14,11 @@ export default class ServicesController {
   public async all({ request, response }: HttpContextContract) {
     let payload: ServiceApiValidator['schema']['props']
     const searchQuery: string = String(request.input('query', ''))
-
+    const cityQuery: string = String(request.input('city', ''))
+    
     try {
       payload = await request.validate(ServiceApiValidator)
+      console.log(payload)
     } catch (err: any) {
       throw new ExceptionService({
         code: ResponseCodes.VALIDATION_ERROR,
@@ -26,7 +28,7 @@ export default class ServicesController {
     }
 
     try {
-      let services: ModelPaginatorContract<Service> = await ServiceService.search(payload, searchQuery)
+      let services: ModelPaginatorContract<Service> = await ServiceService.search(payload, searchQuery, cityQuery)
 
       return response.status(200).send(ResponseService.success(ResponseMessages.SUCCESS, services))
     } catch (err: Error | any) {

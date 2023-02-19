@@ -231,7 +231,7 @@ export default class ServiceService extends BaseService {
     }
   }
 
-  public static async search(payload: ServiceApiValidator['schema']['props'], searchQuery: string): Promise<ModelPaginatorContract<Service>> {
+  public static async search(payload: ServiceApiValidator['schema']['props'], searchQuery: string, cityQuery: string): Promise<ModelPaginatorContract<Service>> {
     if (!payload.limit)
       payload.limit = 4
 
@@ -254,6 +254,12 @@ export default class ServiceService extends BaseService {
       if (searchQuery) {
         query = query.whereHas('user', (query) => {
           query.withScopes((scopes) => scopes.search(searchQuery))
+        })
+      }
+
+      if (cityQuery) {
+        query = query.whereHas('district', (query) => {
+          query.withScopes((scopes) => scopes.search(cityQuery))
         })
       }
 
