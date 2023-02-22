@@ -19,6 +19,7 @@ export default class ServicesTypesSubServiceSeeder extends BaseSeeder {
       { name: 'дизайн интерьера и экстерьера', servicesTypeId: 2 },
       { name: 'дизайн экстерьера и ландшафтный дизайн', servicesTypeId: 2 },
       { name: 'дизайн интерьера и ландшафтный дизайн', servicesTypeId: 2 },
+      { name: 'дизайн интерьера, экстерьера и ландшафтный дизайн', servicesTypeId: 2 },
 
       { name: 'ремонт квартиры', servicesTypeId: 3 },
       { name: 'отделочные работы', servicesTypeId: 3 },
