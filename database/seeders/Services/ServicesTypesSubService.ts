@@ -34,6 +34,7 @@ export default class ServicesTypesSubServiceSeeder extends BaseSeeder {
 
       { name: 'по городу', servicesTypeId: 4 },
       { name: 'межгород', servicesTypeId: 4 },
+      { name: 'по городу и межгород', servicesTypeId: 4 },
     ]
     try {
       // await ServicesTypesSubService.createMany(servicesTypesSubService)
