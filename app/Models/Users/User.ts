@@ -66,7 +66,7 @@ export default class User extends BaseModel {
   public companyName?: string
 
   @column()
-  public taxIdentificationNumber?: number
+  public taxIdentificationNumber?: string
 
   @column()
   public rating: number

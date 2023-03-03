@@ -31,7 +31,7 @@ export const UserFactory = Factory
         password: '1234Test',
         roleId: item.id,
         companyName: faker.company.companyName(),
-        taxIdentificationNumber: faker.unique(faker.datatype.number),
+        taxIdentificationNumber: faker.unique(faker.datatype.string),
       }
     })
   })

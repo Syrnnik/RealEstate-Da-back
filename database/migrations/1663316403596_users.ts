@@ -7,7 +7,7 @@ export default class Users extends BaseSchema {
     this.schema.alterTable(this.tableName, (table) => {
 
       table.string('companyName').nullable().comment('Только для юр лица')
-      table.integer('taxIdentificationNumber').unsigned().unique().nullable().comment('Только для юр лица')
+      table.string('taxIdentificationNumber').unique().nullable().comment('Только для юр лица')
 
     })
   }
