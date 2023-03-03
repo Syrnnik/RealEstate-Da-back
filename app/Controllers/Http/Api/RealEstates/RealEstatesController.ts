@@ -85,8 +85,7 @@ export default class RealEstatesController {
 
   // public async get({ params, response }: HttpContextContract) {
   public async get({ request, response }: HttpContextContract) {
-    // console.log(request['requestData'])
-    let params = request['requestData']
+    let params = request.params()
     const uuid: RealEstate['uuid'] = params.uuid
     const currentUserId: User['id'] | undefined = params.currentUserId
 
