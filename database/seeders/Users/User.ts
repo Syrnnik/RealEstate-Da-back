@@ -9,8 +9,9 @@ import { UserFactory } from 'Database/factories'
 export default class UserSeeder extends BaseSeeder {
   public async run () {
     try {
-      let adminRole: Role | null = await RoleService.get(Roles.ADMIN)
-      let managerRole: Role | null = await RoleService.get(Roles.MANAGER)
+      const adminRole: Role | null = await RoleService.get(Roles.ADMIN)
+      const managerRole: Role | null = await RoleService.get(Roles.MANAGER)
+      const userRole: Role | null = await RoleService.get(Roles.USER)
 
       if (!adminRole) {
         Logger.error('Admin role is not defined!')
@@ -48,6 +49,18 @@ export default class UserSeeder extends BaseSeeder {
           email: 'user@mail.ru',
           password: '1234User',
           isActivated: true,
+          roleId: userRole.id,
+        },
+        {
+          ownerType: 1,
+          firstName: 'Org',
+          lastName: 'User',
+          email: 'organization@mail.ru',
+          password: '1234Org',
+          isActivated: true,
+          roleId: userRole.id,
+          companyName: "TEST ORG",
+          taxIdentificationNumber: "1234567890"
         }
       ])
 
