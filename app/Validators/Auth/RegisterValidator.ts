@@ -54,8 +54,9 @@ export default class RegisterValidator extends BaseValidator {
     companyName: schema.string.optional({}, [
       rules.requiredWhen('ownerType', '=', OwnerTypes.AGENT)
     ]),
-    taxIdentificationNumber: schema.number.optional([
-      rules.unsigned(),
+    taxIdentificationNumber: schema.string.optional({}, [
+      rules.minLength(10),
+      rules.maxLength(10),
       rules.unique({ table: 'users', column: 'taxIdentificationNumber' }),
       rules.requiredWhen('ownerType', '=', OwnerTypes.AGENT)
     ]),

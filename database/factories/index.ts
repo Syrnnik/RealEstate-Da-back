@@ -23,6 +23,7 @@ import {
 export const UserFactory = Factory
   .define(User, ({ faker }) => {
     return RoleService.get(Roles.USER).then(item => {
+      const taxIdentificationNumber = faker.datatype.number({ min: 1000000000, max: 9999999999 }).toString()
       return {
         ownerType: faker.datatype.number(OwnerTypes.AGENT),
         firstName: faker.name.firstName(),
@@ -31,7 +32,8 @@ export const UserFactory = Factory
         password: '1234Test',
         roleId: item.id,
         companyName: faker.company.companyName(),
-        taxIdentificationNumber: faker.unique(faker.datatype.number),
+        // taxIdentificationNumber: faker.unique(faker.datatype.string),
+        taxIdentificationNumber: taxIdentificationNumber,
       }
     })
   })
