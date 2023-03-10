@@ -37,6 +37,11 @@ export default class EstateSeeder extends BaseSeeder {
           { name: "Общепит", realEstateTypeId: 4 },
           { name: "Здание целиком", realEstateTypeId: 4 },
           { name: "Многоквартирный жилой дом", realEstateTypeId: 4 },
+
+          // Дома
+          { name: "Дом", realEstateTypeId: 5 },
+          { name: "Дача", realEstateTypeId: 5 },
+          { name: "Таунхаус", realEstateTypeId: 5 },
         ]
       );
     } catch (err) {
