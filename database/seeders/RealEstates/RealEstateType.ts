@@ -10,6 +10,7 @@ export default class RealEstateTypeSeeder extends BaseSeeder {
         { name: 'Паркинг Гараж' },
         { name: 'Земельные участки' },
         { name: 'Коммерческая недвижимость' },
+        { name: 'Дом' },
       ])
     } catch (err: any) {
       Logger.error(err)
