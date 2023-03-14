@@ -6,7 +6,7 @@ export default class EstateSeeder extends BaseSeeder {
   public async run() {
     try {
       await Estate.updateOrCreateMany(
-        Estate.columns[1],
+        Estate.columns[2],
         [
           // Квартиры Комнаты
           { name: "Квартира", realEstateTypeId: 1 },
