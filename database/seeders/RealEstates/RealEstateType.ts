@@ -5,13 +5,16 @@ import RealEstateType from 'App/Models/RealEstates/RealEstateType'
 export default class RealEstateTypeSeeder extends BaseSeeder {
   public async run () {
     try {
-      await RealEstateType.createMany([
-        { name: 'Квартиры Комнаты' },
-        { name: 'Паркинг Гараж' },
-        { name: 'Земельные участки' },
-        { name: 'Коммерческая недвижимость' },
-        { name: 'Дом' },
-      ])
+      await RealEstateType.updateOrCreateMany(
+        RealEstateType.columns[1],
+        [
+          { name: 'Квартиры Комнаты' },
+          { name: 'Паркинг Гараж' },
+          { name: 'Земельные участки' },
+          { name: 'Коммерческая недвижимость' },
+          { name: 'Дом' },
+        ]
+      )
     } catch (err: any) {
       Logger.error(err)
     }
