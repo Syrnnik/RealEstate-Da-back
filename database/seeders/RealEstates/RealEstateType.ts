@@ -6,7 +6,7 @@ export default class RealEstateTypeSeeder extends BaseSeeder {
   public async run () {
     try {
       await RealEstateType.updateOrCreateMany(
-        RealEstateType.columns[1],
+        RealEstateType.columns[2],
         [
           { name: 'Квартиры Комнаты' },
           { name: 'Паркинг Гараж' },
