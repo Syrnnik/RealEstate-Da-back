@@ -7,10 +7,10 @@ export default class RealEstateTypeSeeder extends BaseSeeder {
     try {
       await RealEstateType.createMany([
         { name: "Квартиры Комнаты" },
-        { name: "Паркинг Гараж" },
-        { name: "Земельные участки" },
-        { name: "Коммерческая недвижимость" },
         { name: "Дом" },
+        { name: "Земельные участки" },
+        { name: "Паркинг Гараж" },
+        { name: "Коммерческая недвижимость" },
       ]);
     } catch (err: any) {
       Logger.error(err);
