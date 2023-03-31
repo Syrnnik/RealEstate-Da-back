@@ -39,10 +39,11 @@ export default class ServicesTypesSubServiceSeeder extends BaseSeeder {
         { name: "строительство", servicesTypeId: 3 },
         { name: "интернет", servicesTypeId: 3 },
 
-        // Грузоперевозки
+        // Грузоперевозки / Грузчики
         { name: "по городу", servicesTypeId: 4 },
         { name: "межгород", servicesTypeId: 4 },
         { name: "по городу и межгород", servicesTypeId: 4 },
+        { name: "грузчики", servicesTypeId: 4 },
       ]);
     } catch (err: any) {
       Logger.error(err);
