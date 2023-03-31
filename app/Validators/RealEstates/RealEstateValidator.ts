@@ -1,17 +1,36 @@
-import BaseValidator from '../BaseValidator'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import BaseValidator from "../BaseValidator";
+import { rules, schema } from "@ioc:Adonis/Core/Validator";
+import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import {
   AreaType,
-  BalconyTypes, BuildingTypes, DirectionTypes, ElevatorTypes, EstateTypes, GradeTypes, HouseBuildingTypes,
-  HouseTypes, LayoutTypes, LocationTypes, OutBuildingTypes, PrepaymentTypes, RentalPeriodTypes,
-  RentalTypes, RepairTypes, RoomsTypes, SaleTypes, SellersTypes, TransactionTypes, WCTypes,
-  Window, WindowTypes, WindRoseDirectionTypes,
-} from 'Contracts/enums'
+  BalconyTypes,
+  BuildingTypes,
+  DirectionTypes,
+  ElevatorTypes,
+  EstateTypes,
+  GradeTypes,
+  HouseBuildingTypes,
+  HouseTypes,
+  LayoutTypes,
+  LocationTypes,
+  OutBuildingTypes,
+  PrepaymentTypes,
+  RentalPeriodTypes,
+  RentalTypes,
+  RepairTypes,
+  RoomsTypes,
+  SaleTypes,
+  SellersTypes,
+  TransactionTypes,
+  WCTypes,
+  Window,
+  WindowTypes,
+  WindRoseDirectionTypes,
+} from "Contracts/enums";
 
 export default class RealEstateValidator extends BaseValidator {
   constructor(protected ctx: HttpContextContract) {
-    super()
+    super();
   }
 
   /*
@@ -36,11 +55,11 @@ export default class RealEstateValidator extends BaseValidator {
   public schema = schema.create({
     estateId: schema.number([
       rules.unsigned(),
-      rules.exists({ table: 'estates', column: 'id' }),
+      rules.exists({ table: "estates", column: "id" }),
     ]),
     userId: schema.number([
       rules.unsigned(),
-      rules.exists({ table: 'users', column: 'id' }),
+      rules.exists({ table: "users", column: "id" }),
     ]),
     transactionType: schema.number([
       rules.unsigned(),
@@ -50,31 +69,18 @@ export default class RealEstateValidator extends BaseValidator {
       rules.unsigned(),
       rules.range(0, RentalPeriodTypes.SHORT_TIME),
     ]),
-    pledge: schema.number([
-      rules.unsigned(),
-    ]),
-    commission: schema.number([
-      rules.unsigned(),
-      rules.range(0, 100),
-    ]),
+    pledge: schema.number([rules.unsigned()]),
+    commission: schema.number([rules.unsigned(), rules.range(0, 100)]),
     address: schema.string({ trim: true }, [
       rules.minLength(2),
       rules.maxLength(255),
     ]),
     district: schema.object().members({
-      name: schema.string({ trim: true }, [
-        rules.maxLength(255),
-      ]),
-      city: schema.string({ trim: true }, [
-        rules.maxLength(255),
-      ])
+      name: schema.string({ trim: true }, [rules.maxLength(255)]),
+      city: schema.string({ trim: true }, [rules.maxLength(255)]),
     }),
-    latitude: schema.string({ trim: true }, [
-      rules.maxLength(255)
-    ]),
-    longitude: schema.string({ trim: true }, [
-      rules.maxLength(255)
-    ]),
+    latitude: schema.string({ trim: true }, [rules.maxLength(255)]),
+    longitude: schema.string({ trim: true }, [rules.maxLength(255)]),
     houseType: schema.number.optional([
       rules.unsigned(),
       rules.range(0, HouseTypes.COMMERCIAL_APARTMENT),
@@ -83,8 +89,8 @@ export default class RealEstateValidator extends BaseValidator {
       rules.unsigned(),
       rules.range(0, RoomsTypes.FREE),
     ]),
-    totalArea: schema.number.optional([ rules.unsigned() ]),
-    floor: schema.number.optional([ rules.unsigned() ]),
+    totalArea: schema.number.optional([rules.unsigned()]),
+    floor: schema.number.optional([rules.unsigned()]),
     WCType: schema.number.optional([
       rules.unsigned(),
       rules.range(0, WCTypes.TWO_OR_MORE),
@@ -180,9 +186,7 @@ export default class RealEstateValidator extends BaseValidator {
       rules.unsigned(),
       rules.range(0, SaleTypes.NOT_IMPORTANT),
     ]),
-    price: schema.number([
-      rules.unsigned(),
-    ]),
+    price: schema.number([rules.unsigned()]),
     estateType: schema.number.optional([
       rules.unsigned(),
       rules.range(EstateTypes.NEW_BUILDING, EstateTypes.OLD_BUILDING),
@@ -191,7 +195,7 @@ export default class RealEstateValidator extends BaseValidator {
       rules.unsigned(),
       rules.range(AreaType.SNT, AreaType.LPX),
     ]),
-    landArea: schema.number.optional([ rules.unsigned() ]),
+    landArea: schema.number.optional([rules.unsigned()]),
     isVip: schema.boolean.optional(),
     isHot: schema.boolean.optional(),
     prepaymentType: schema.number.optional([
@@ -202,38 +206,33 @@ export default class RealEstateValidator extends BaseValidator {
       rules.unsigned(),
       rules.range(0, RentalTypes.DAILY),
     ]),
-    communalPrice: schema.number.optional([
-      rules.unsigned(),
-    ]),
+    communalPrice: schema.number.optional([rules.unsigned()]),
     residentalComplex: schema.string.optional({ trim: true }, [
       rules.maxLength(255),
     ]),
-    livingArea: schema.number.optional([
-      rules.unsigned(),
-    ]),
-    kitchenArea: schema.number.optional([
-      rules.unsigned(),
-    ]),
-    maxFloor: schema.number.optional([ rules.unsigned() ]),
-    acres: schema.number.optional([ rules.unsigned() ]),
-    cityDistance: schema.number.optional([ rules.unsigned() ]),
-    yearOfConstruction: schema.date.optional({ format: 'yyyy' }, [
-      rules.before('today'),
+    livingArea: schema.number.optional([rules.unsigned()]),
+    kitchenArea: schema.number.optional([rules.unsigned()]),
+    maxFloor: schema.number.optional([rules.unsigned()]),
+    acres: schema.number.optional([rules.unsigned()]),
+    cityDistance: schema.number.optional([rules.unsigned()]),
+    yearOfConstruction: schema.date.optional({ format: "yyyy" }, [
+      rules.before("today"),
     ]),
     ceilingHeight: schema.number.optional([
       rules.unsigned(),
       rules.range(0, 100),
     ]),
     image: schema.file.optional({
-      extnames: ['jpg', 'jpeg', 'png', 'webp'],
+      extnames: ["jpg", "jpeg", "png", "webp"],
     }),
     images: schema.array.optional().members(
       schema.file.optional({
-        extnames: ['jpg', 'jpeg', 'png', 'webp'],
+        extnames: ["jpg", "jpeg", "png", "webp"],
       })
     ),
     cadastralNumber: schema.string.optional({ trim: true }),
-  })
+    landCadastralNumber: schema.string.optional({ trim: true }),
+  });
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
@@ -248,6 +247,7 @@ export default class RealEstateValidator extends BaseValidator {
    */
   public messages = {
     ...this.messages,
-    'yearOfConstruction.before': 'Значение должно быть не выше сегодняшнего дня!'
-  }
+    "yearOfConstruction.before":
+      "Значение должно быть не выше сегодняшнего дня!",
+  };
 }
