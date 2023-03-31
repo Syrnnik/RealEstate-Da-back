@@ -27,6 +27,7 @@ export default class EstateSeeder extends BaseSeeder {
         { name: "Гараж", realEstateTypeId: 4 },
 
         // Коммерческая недвижимость
+        { name: "Апартаменты", realEstateTypeId: 5 },
         { name: "Офис", realEstateTypeId: 5 },
         { name: "Склад", realEstateTypeId: 5 },
         { name: "Гостиница", realEstateTypeId: 5 },
