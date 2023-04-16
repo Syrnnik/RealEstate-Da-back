@@ -16,33 +16,34 @@ export default class ServicesTypesSubServiceSeeder extends BaseSeeder {
         { name: "Страховщик", servicesTypeId: 1 },
 
         // Дизайн
-        { name: "дизайн интерьера", servicesTypeId: 2 },
-        { name: "дизайн экстерьера", servicesTypeId: 2 },
-        { name: "ландшафтный дизайн", servicesTypeId: 2 },
-        { name: "дизайн интерьера и экстерьера", servicesTypeId: 2 },
-        { name: "дизайн интерьера и ландшафтный дизайн", servicesTypeId: 2 },
-        { name: "дизайн экстерьера и ландшафтный дизайн", servicesTypeId: 2 },
-        {
-          name: "дизайн интерьера, экстерьера и ландшафтный дизайн",
-          servicesTypeId: 2,
-        },
+        { name: "Дизайн интерьера", servicesTypeId: 2 },
+        { name: "Дизайн экстерьера", servicesTypeId: 2 },
+        { name: "Ландшафтный дизайн", servicesTypeId: 2 },
+        // { name: "Дизайн интерьера и экстерьера", servicesTypeId: 2 },
+        // { name: "Дизайн интерьера и ландшафтный дизайн", servicesTypeId: 2 },
+        // { name: "Дизайн экстерьера и ландшафтный дизайн", servicesTypeId: 2 },
+        // {
+        //   name: "Дизайн интерьера, экстерьера и ландшафтный дизайн",
+        //   servicesTypeId: 2,
+        // },
 
         // Ремонт / строительство
-        { name: "ремонт квартиры", servicesTypeId: 3 },
-        { name: "отделочные работы", servicesTypeId: 3 },
-        { name: "сборка и ремонт мебели", servicesTypeId: 3 },
-        { name: "электрика", servicesTypeId: 3 },
-        { name: "сантехника", servicesTypeId: 3 },
-        { name: "остекление", servicesTypeId: 3 },
-        { name: "установка техники", servicesTypeId: 3 },
-        { name: "уборка", servicesTypeId: 3 },
-        { name: "строительство", servicesTypeId: 3 },
-        { name: "интернет", servicesTypeId: 3 },
+        { name: "Ремонт квартиры", servicesTypeId: 3 },
+        { name: "Отделочные работы", servicesTypeId: 3 },
+        { name: "Сборка и ремонт мебели", servicesTypeId: 3 },
+        { name: "Электрика", servicesTypeId: 3 },
+        { name: "Сантехника", servicesTypeId: 3 },
+        { name: "Остекление", servicesTypeId: 3 },
+        { name: "Установка техники", servicesTypeId: 3 },
+        { name: "Уборка", servicesTypeId: 3 },
+        { name: "Строительство", servicesTypeId: 3 },
+        { name: "Интернет", servicesTypeId: 3 },
 
-        // Грузоперевозки
-        { name: "по городу", servicesTypeId: 4 },
-        { name: "межгород", servicesTypeId: 4 },
-        { name: "по городу и межгород", servicesTypeId: 4 },
+        // Грузоперевозки / Грузчики
+        { name: "По городу", servicesTypeId: 4 },
+        { name: "Межгород", servicesTypeId: 4 },
+        // { name: "По городу и межгород", servicesTypeId: 4 },
+        { name: "Грузчики", servicesTypeId: 4 },
       ]);
     } catch (err: any) {
       Logger.error(err);
