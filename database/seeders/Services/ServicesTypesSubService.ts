@@ -19,13 +19,13 @@ export default class ServicesTypesSubServiceSeeder extends BaseSeeder {
         { name: "Дизайн интерьера", servicesTypeId: 2 },
         { name: "Дизайн экстерьера", servicesTypeId: 2 },
         { name: "Ландшафтный дизайн", servicesTypeId: 2 },
-        { name: "Дизайн интерьера и экстерьера", servicesTypeId: 2 },
-        { name: "Дизайн интерьера и ландшафтный дизайн", servicesTypeId: 2 },
-        { name: "Дизайн экстерьера и ландшафтный дизайн", servicesTypeId: 2 },
-        {
-          name: "Дизайн интерьера, экстерьера и ландшафтный дизайн",
-          servicesTypeId: 2,
-        },
+        // { name: "Дизайн интерьера и экстерьера", servicesTypeId: 2 },
+        // { name: "Дизайн интерьера и ландшафтный дизайн", servicesTypeId: 2 },
+        // { name: "Дизайн экстерьера и ландшафтный дизайн", servicesTypeId: 2 },
+        // {
+        //   name: "Дизайн интерьера, экстерьера и ландшафтный дизайн",
+        //   servicesTypeId: 2,
+        // },
 
         // Ремонт / строительство
         { name: "Ремонт квартиры", servicesTypeId: 3 },
@@ -42,7 +42,7 @@ export default class ServicesTypesSubServiceSeeder extends BaseSeeder {
         // Грузоперевозки / Грузчики
         { name: "По городу", servicesTypeId: 4 },
         { name: "Межгород", servicesTypeId: 4 },
-        { name: "По городу и межгород", servicesTypeId: 4 },
+        // { name: "По городу и межгород", servicesTypeId: 4 },
         { name: "Грузчики", servicesTypeId: 4 },
       ]);
     } catch (err: any) {
