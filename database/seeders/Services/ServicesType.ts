@@ -9,7 +9,7 @@ export default class ServicesTypeSeeder extends BaseSeeder {
         { name: "Услуги риелтора" },
         { name: "Дизайн" },
         { name: "Ремонт / строительство" },
-        { name: "Грузоперевозки / Грузчики" },
+        { name: "Грузоперевозки / грузчики" },
       ]);
     } catch (err: any) {
       Logger.error(err);
