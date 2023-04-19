@@ -1,63 +1,71 @@
-import Label from './Label'
-import User from '../Users/User'
-import District from '../District'
-import Response from '../Response/Response'
-import ServicesTypesAttribute from './ServicesTypesAttribute'
-import ServicesTypesSubService from './ServicesTypesSubService'
-import CamelCaseNamingStrategy from '../../../start/CamelCaseNamingStrategy'
-import { DateTime } from 'luxon'
 import {
-  BaseModel, beforeDelete, BelongsTo, belongsTo,
-  computed, HasMany, hasMany, ManyToMany,
-  manyToMany, column,
-} from '@ioc:Adonis/Lucid/Orm'
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  ManyToMany,
+  beforeDelete,
+  belongsTo,
+  column,
+  computed,
+  hasMany,
+  manyToMany,
+} from "@ioc:Adonis/Lucid/Orm";
+import { DateTime } from "luxon";
+import CamelCaseNamingStrategy from "../../../start/CamelCaseNamingStrategy";
+import District from "../District";
+import Response from "../Response/Response";
+import User from "../Users/User";
+import Label from "./Label";
+import ServicesTypesAttribute from "./ServicesTypesAttribute";
+import SubService from "./SubService";
 
 // import { EXPERIENCE_TYPES } from 'Config/services'
 
 export default class Service extends BaseModel {
-  public static namingStrategy = new CamelCaseNamingStrategy()
+  public static namingStrategy = new CamelCaseNamingStrategy();
   public static readonly columns = [
-    'id', 'description',
-    'isBanned', 'userId', 'servicesTypesSubServiceId',
-    'servicesTypesAttributeId', 'createdAt', 'updatedAt',
-  ] as const
+    "id",
+    "description",
+    "isBanned",
+    "userId",
+    "servicesTypesAttributeId",
+    "createdAt",
+    "updatedAt",
+  ] as const;
 
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   // @column()
   // public experienceType: number
 
   @column()
-  public description: string
+  public description: string;
 
   @column()
-  public address: string
+  public address: string;
 
   @column({ serializeAs: null })
-  public isBanned: boolean
+  public isBanned: boolean;
 
-  @column({ columnName: 'user_id' })
-  public userId: User['id']
+  @column({ columnName: "user_id" })
+  public userId: User["id"];
 
-  @column({ columnName: 'district_id' })
-  public districtId: District['id']
+  @column({ columnName: "district_id" })
+  public districtId: District["id"];
 
-  @column({ columnName: 'servicesTypesSubService_id' })
-  public servicesTypesSubServiceId: ServicesTypesSubService['id']
-
-  @column({ columnName: 'servicesTypesAttribute_id' })
-  public servicesTypesAttributeId?: ServicesTypesAttribute['id']
+  @column({ columnName: "servicesTypesAttribute_id" })
+  public servicesTypesAttributeId?: ServicesTypesAttribute["id"];
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
     serializeAs: null,
   })
-  public updatedAt: DateTime
+  public updatedAt: DateTime;
 
   // @computed()
   // public get experienceTypeForUser(): typeof EXPERIENCE_TYPES[number] {
@@ -66,31 +74,31 @@ export default class Service extends BaseModel {
 
   @computed({ serializeAs: null })
   public get isBannedForUser(): string {
-    return this.isBanned ? 'Да' : 'Нет'
+    return this.isBanned ? "Да" : "Нет";
   }
 
   @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
+  public user: BelongsTo<typeof User>;
 
   @belongsTo(() => District)
-  public district: BelongsTo<typeof District>
-
-  @belongsTo(() => ServicesTypesSubService)
-  public subService: BelongsTo<typeof ServicesTypesSubService>
+  public district: BelongsTo<typeof District>;
 
   @belongsTo(() => ServicesTypesAttribute)
-  public attribute: BelongsTo<typeof ServicesTypesAttribute>
+  public attribute: BelongsTo<typeof ServicesTypesAttribute>;
+
+  @hasMany(() => SubService)
+  public subServices: HasMany<typeof SubService>;
 
   @hasMany(() => Response)
-  public responses: HasMany<typeof Response>
+  public responses: HasMany<typeof Response>;
 
   @manyToMany(() => Label, {
-    pivotTable: 'labels_services',
+    pivotTable: "labels_services",
   })
-  public labels: ManyToMany<typeof Label>
+  public labels: ManyToMany<typeof Label>;
 
   @beforeDelete()
   public static async deleteAllRelations(item: Service) {
-    await item.related('labels').detach([])
+    await item.related("labels").detach([]);
   }
 }

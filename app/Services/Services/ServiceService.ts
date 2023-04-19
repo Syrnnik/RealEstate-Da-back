@@ -1,87 +1,105 @@
-import BaseService from '../BaseService'
-import User from 'App/Models/Users/User'
-import LabelService from './LabelService'
-import District from 'App/Models/District'
-import Logger from '@ioc:Adonis/Core/Logger'
-import Label from 'App/Models/Services/Label'
-import DistrictService from '../DistrictService'
-import Service from 'App/Models/Services/Service'
-import ServicesTypeService from './ServicesTypeService'
-import ServiceValidator from 'App/Validators/Services/ServiceValidator'
-import ServiceApiValidator from 'App/Validators/Api/Services/ServiceValidator'
-import ServicesTypesSubService from 'App/Models/Services/ServicesTypesSubService'
-import { PaginationConfig } from 'Contracts/database'
-import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
-import { ResponseCodes, ResponseMessages } from 'Contracts/response'
-import { Error, PaginateConfig, ServiceConfig } from 'Contracts/services'
+import Logger from "@ioc:Adonis/Core/Logger";
+import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
+import District from "App/Models/District";
+import Label from "App/Models/Services/Label";
+import Service from "App/Models/Services/Service";
+import SubService from "App/Models/Services/SubService";
+import User from "App/Models/Users/User";
+import ServiceApiValidator from "App/Validators/Api/Services/ServiceValidator";
+import ServiceValidator from "App/Validators/Services/ServiceValidator";
+import { PaginationConfig } from "Contracts/database";
+import { ResponseCodes, ResponseMessages } from "Contracts/response";
+import { Error, PaginateConfig, ServiceConfig } from "Contracts/services";
+import BaseService from "../BaseService";
+import DistrictService from "../DistrictService";
+import LabelService from "./LabelService";
 
 // import { removeLastLetter } from '../../../helpers'
 
-type Columns = typeof Service['columns'][number]
-type ValidatorPayload = ServiceValidator['schema']['props']
+type Columns = typeof Service["columns"][number];
+type ValidatorPayload = ServiceValidator["schema"]["props"];
 
 export default class ServiceService extends BaseService {
-  public static async paginate(config: PaginateConfig<Columns, Service>, columns: Columns[] = []): Promise<ModelPaginatorContract<Service>> {
-    let query = Service.query().select(columns)
+  public static async paginate(
+    config: PaginateConfig<Columns, Service>,
+    columns: Columns[] = []
+  ): Promise<ModelPaginatorContract<Service>> {
+    let query = Service.query().select(columns);
 
     if (config.relations) {
       for (let item of config.relations) {
-        query = query.preload(item)
+        query = query.preload(item);
       }
     }
 
-    return await query.get(config)
+    return await query.get(config);
   }
 
-  public static async get(id: Service['id'], config: ServiceConfig<Service> = {}): Promise<Service> {
-    let item: Service | null
+  public static async get(
+    id: Service["id"],
+    config: ServiceConfig<Service> = {}
+  ): Promise<Service> {
+    let item: Service | null;
 
     try {
-      item = await Service.find(id, { client: config.trx })
+      item = await Service.find(id, { client: config.trx });
     } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.DATABASE_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
     }
 
     try {
-      if (!item)
-        throw new Error()
+      if (!item) throw new Error();
 
       if (config.relations) {
         for (let relationItem of config.relations) {
-          await item.load(relationItem)
+          await item.load(relationItem);
         }
       }
 
-      return item
+      return item;
     } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.NEWS_NOT_FOUND } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.CLIENT_ERROR,
+        message: ResponseMessages.NEWS_NOT_FOUND,
+      } as Error;
     }
   }
 
-  public static async getUserServicesIds(userId: User['id']): Promise<Service['id'][]> {
+  public static async getUserServicesIds(
+    userId: User["id"]
+  ): Promise<Service["id"][]> {
     try {
-      const services: Service[] = await Service
-        .query()
-        .select(['id'])
-        .where('user_id', userId)
-        .pojo()
+      const services: Service[] = await Service.query()
+        .select(["id"])
+        .where("user_id", userId)
+        .pojo();
 
-      return services.map((item: Service) => item.id)
+      return services.map((item: Service) => item.id);
     } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.DATABASE_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
     }
   }
 
-  public static async create(payload: ValidatorPayload, { trx }: ServiceConfig<Service> = {}): Promise<Service> {
-    let item: Service
-    let districtId: District['id']
-    const { district, ...servicePayload } = payload
+  public static async create(
+    payload: ValidatorPayload,
+    { trx }: ServiceConfig<Service> = {}
+  ): Promise<Service> {
+    let item: Service;
+    let districtId: District["id"];
+    let subServices: Array<number> = payload.subServices;
+    const { district, ...servicePayload } = payload;
 
-    district.name = district.name.toLowerCase()
-    district.city = district.city.toLowerCase()
+    district.name = district.name.toLowerCase();
+    district.city = district.city.toLowerCase();
 
     // try {
     //   await this.checkUserServiceType(payload.userId, payload.servicesTypeId)
@@ -94,54 +112,95 @@ export default class ServiceService extends BaseService {
 
     try {
       // districtId = (await DistrictService.create(payload.district.name, payload.district.city, { trx })).id
-      districtId = (await DistrictService.create(payload.district.name, payload.district.city)).id
+      districtId = (
+        await DistrictService.create(
+          payload.district.name,
+          payload.district.city
+        )
+      ).id;
     } catch (err: Error | any) {
-      districtId = (await DistrictService.getByNameAndCity(payload.district.name, payload.district.city)).id
+      districtId = (
+        await DistrictService.getByNameAndCity(
+          payload.district.name,
+          payload.district.city
+        )
+      ).id;
     }
 
     try {
-      item = await Service.create({ ...servicePayload, districtId }, { client: trx })
+      item = await Service.create(
+        { ...servicePayload, districtId },
+        { client: trx }
+      );
     } catch (err: any) {
       // await trx.rollback()
 
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.DATABASE_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
+    }
+
+    try {
+      for (let i in subServices)
+        await SubService.create({
+          serviceId: item.id,
+          serviceTypeSubServiceId: subServices[i],
+        });
+    } catch (err: Error | any) {
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.DATABASE_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
     }
 
     if (payload.labels) {
-      let labels: string[] = payload.labels.split(', ')
-      let labelsId: number[] = []
+      let labels: string[] = payload.labels.split(", ");
+      let labelsId: number[] = [];
       for (let labelItem of labels) {
         try {
-          let label: Label = await LabelService.getByName(labelItem)
-          labelsId.push(label.id)
+          let label: Label = await LabelService.getByName(labelItem);
+          labelsId.push(label.id);
         } catch (err: Error | any) {
-          let label: Label = await LabelService.create({ name: labelItem }, { trx })
-          labelsId.push(label.id)
+          let label: Label = await LabelService.create(
+            { name: labelItem },
+            { trx }
+          );
+          labelsId.push(label.id);
         }
       }
 
       try {
-        await item.related('labels').attach(labelsId)
+        await item.related("labels").attach(labelsId);
       } catch (err: any) {
         // await trx.rollback()
 
-        Logger.error(err)
-        throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Error
+        Logger.error(err);
+        throw {
+          code: ResponseCodes.DATABASE_ERROR,
+          message: ResponseMessages.ERROR,
+        } as Error;
       }
     }
 
     // await trx.commit()
-    return item
+    return item;
   }
 
-  public static async update(id: Service['id'], payload: ValidatorPayload, config: ServiceConfig<Service> = {}): Promise<Service> {
-    let item: Service
-    let districtId: District['id']
-    const { district, ...servicePayload } = payload
+  public static async update(
+    id: Service["id"],
+    payload: ValidatorPayload,
+    config: ServiceConfig<Service> = {}
+  ): Promise<Service> {
+    let item: Service;
+    let districtId: District["id"];
+    let subServices: Array<number> = payload.subServices;
+    const { district, ...servicePayload } = payload;
 
-    district.name = district.name.toLowerCase()
-    district.city = district.city.toLowerCase()
+    district.name = district.name.toLowerCase();
+    district.city = district.city.toLowerCase();
 
     // try {
     //   await this.checkUserServiceType(payload.userId, payload.servicesTypeId)
@@ -154,123 +213,173 @@ export default class ServiceService extends BaseService {
 
     try {
       // districtId = (await DistrictService.create(payload.district.name, payload.district.city, { trx })).id
-      districtId = (await DistrictService.create(payload.district.name, payload.district.city)).id
+      districtId = (
+        await DistrictService.create(
+          payload.district.name,
+          payload.district.city
+        )
+      ).id;
     } catch (err: Error | any) {
-      districtId = (await DistrictService.getByNameAndCity(payload.district.name, payload.district.city)).id
+      districtId = (
+        await DistrictService.getByNameAndCity(
+          payload.district.name,
+          payload.district.city
+        )
+      ).id;
     }
 
     try {
-      item = await this.get(id, config)
+      item = await this.get(id, config);
     } catch (err: any) {
       // await config.trx.rollback()
 
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.DATABASE_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
+    }
+
+    try {
+      for (let i in subServices)
+        await SubService.create({
+          serviceId: item.id,
+          serviceTypeSubServiceId: subServices[i],
+        });
+    } catch (err: Error | any) {
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.DATABASE_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
     }
 
     if (payload.labels) {
       try {
-        await item.related('labels').detach()
+        await item.related("labels").detach();
       } catch (err: any) {
         // await config.trx.rollback()
 
-        Logger.error(err)
-        throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Error
+        Logger.error(err);
+        throw {
+          code: ResponseCodes.SERVER_ERROR,
+          message: ResponseMessages.ERROR,
+        } as Error;
       }
 
-      let labels: string[] = payload.labels.split(', ')
-      let labelsId: number[] = []
+      let labels: string[] = payload.labels.split(", ");
+      let labelsId: number[] = [];
       for (let labelItem of labels) {
         try {
-          let label: Label = await LabelService.getByName(labelItem)
-          labelsId.push(label.id)
+          let label: Label = await LabelService.getByName(labelItem);
+          labelsId.push(label.id);
         } catch (err: Error | any) {
-          let label: Label = await LabelService.create({ name: labelItem }, { trx: config.trx })
-          labelsId.push(label.id)
+          let label: Label = await LabelService.create(
+            { name: labelItem },
+            { trx: config.trx }
+          );
+          labelsId.push(label.id);
         }
       }
 
       try {
-        await item.related('labels').attach(labelsId)
+        await item.related("labels").attach(labelsId);
       } catch (err: any) {
         // await config.trx.rollback()
 
-        Logger.error(err)
-        throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Error
+        Logger.error(err);
+        throw {
+          code: ResponseCodes.DATABASE_ERROR,
+          message: ResponseMessages.ERROR,
+        } as Error;
       }
     }
 
     try {
-      item = await item.merge({ ...servicePayload, districtId }).save()
+      item = await item.merge({ ...servicePayload, districtId }).save();
 
       // await config.trx.commit()
-      return item
+      return item;
     } catch (err: any) {
       // await config.trx.rollback()
 
-      Logger.error(err)
-      throw { code: ResponseCodes.SERVER_ERROR, message: ResponseMessages.ERROR } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.SERVER_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
     }
   }
 
-  public static async delete(id: Service['id'], config: ServiceConfig<Service> = {}): Promise<void> {
-    let item: Service
+  public static async delete(
+    id: Service["id"],
+    config: ServiceConfig<Service> = {}
+  ): Promise<void> {
+    let item: Service;
 
     try {
-      item = await this.get(id, config)
+      item = await this.get(id, config);
     } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.DATABASE_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
     }
 
     try {
-      await item.delete()
+      await item.delete();
     } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.CLIENT_ERROR, message: ResponseMessages.SERVICE_NOT_FOUND } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.CLIENT_ERROR,
+        message: ResponseMessages.SERVICE_NOT_FOUND,
+      } as Error;
     }
   }
 
-  public static async search(payload: ServiceApiValidator['schema']['props'], searchQuery: string, cityQuery: string): Promise<ModelPaginatorContract<Service>> {
-    if (!payload.limit)
-      payload.limit = 4
+  public static async search(
+    payload: ServiceApiValidator["schema"]["props"],
+    searchQuery: string,
+    cityQuery: string
+  ): Promise<ModelPaginatorContract<Service>> {
+    if (!payload.limit) payload.limit = 4;
 
     const paginatePayload: PaginationConfig = {
       page: payload.page,
       limit: payload.limit,
       orderBy: payload.orderBy,
-    }
+    };
 
     try {
-      let query = Service
-        .query()
-        .preload('user')
-        .preload('labels')
-        .preload('district')
-        .preload('subService', (query) => {
-          query.preload('type')
-        })
+      let query = Service.query()
+        .preload("user")
+        .preload("labels")
+        .preload("district")
+        .preload("subServices", (query) => {
+          query.preload("service");
+        });
 
       if (searchQuery) {
-        query = query.whereHas('user', (query) => {
-          query.withScopes((scopes) => scopes.search(searchQuery))
-        })
+        query = query.whereHas("user", (query) => {
+          query.withScopes((scopes) => scopes.search(searchQuery));
+        });
       }
 
       if (cityQuery) {
-        query = query.whereHas('district', (query) => {
-          query.withScopes((scopes) => scopes.search(cityQuery))
-        })
+        query = query.whereHas("district", (query) => {
+          query.withScopes((scopes) => scopes.search(cityQuery));
+        });
       }
 
       for (let key in payload) {
         if (payload[key]) {
           switch (key) {
             // Skip this api's keys
-            case 'page':
-            case 'limit':
-            case 'orderBy':
-              break
+            case "page":
+            case "limit":
+            case "orderBy":
+              break;
             // Skip this api's keys
 
             // case 'experienceTypes':
@@ -279,67 +388,68 @@ export default class ServiceService extends BaseService {
             //   }
             //   break
 
-            case 'rating':
+            case "rating":
               query = query
-                .join('users', 'services.user_id', 'users.id')
-                .select('services.*')
-                .orderBy('users.rating', payload[key])
-              break
+                .join("users", "services.user_id", "users.id")
+                .select("services.*")
+                .orderBy("users.rating", payload[key]);
+              break;
 
-            case 'districts': // @ts-ignore
-              query = query.whereIn('districtId', payload[key])
-              break
+            case "districts": // @ts-ignore
+              query = query.whereIn("districtId", payload[key]);
+              break;
 
-            case 'servicesTypeId':
-              const subServices: ServicesTypesSubService[] = await ServicesTypeService.getAllSubServicesTypes(payload[key]!)
-              const subServicesIds: ServicesTypesSubService['id'][] = subServices.map((item: ServicesTypesSubService) => item.id)
+            // case "servicesTypeId":
+            //   const subServices: ServicesTypesSubService[] =
+            //     await ServicesTypeService.getAllSubServicesTypes(payload[key]!);
+            //   const subServicesIds: ServicesTypesSubService["id"][] =
+            //     subServices.map((item: ServicesTypesSubService) => item.id);
 
-              query = query.whereHas('subService', (query) => {
-                query.whereIn('id', subServicesIds)
-              })
-              break
+            //   query = query.whereHas("subService", (query) => {
+            //     query.whereIn("id", subServicesIds);
+            //   });
+            //   break;
 
-            case 'subServicesTypes':
-              query = query.whereHas('subService', (query) => {
+            // case "subServicesTypes":
+            //   query = query.whereHas("subService", (query) => {
+            //     for (let item of payload[key]!) {
+            //       query.where("id", item);
+            //     }
+            //   });
 
+            //   break;
+
+            case "attributesTypes":
+              query = query.whereHas("attribute", (query) => {
                 for (let item of payload[key]!) {
-                  query.where('id', item)
+                  query.where("id", item);
                 }
+              });
 
-              })
+              break;
 
-              break
-
-            case 'attributesTypes':
-              query = query.whereHas('attribute', (query) => {
-
-                for (let item of payload[key]!) {
-                  query.where('id', item)
-                }
-
-              })
-
-              break
-
-            case 'labels':
+            case "labels":
               for (let item of payload[key]!) {
-                query = query.whereHas('labels', (labelQuery) => {
-                  labelQuery.where('label_id', item)
-                })
+                query = query.whereHas("labels", (labelQuery) => {
+                  labelQuery.where("label_id", item);
+                });
               }
-              break
+              break;
 
             default:
-              query = query.where(key, payload[key])
-              break
+              query = query.where(key, payload[key]);
+              break;
           }
         }
       }
 
-      return await query.get(paginatePayload)
+      return await query.get(paginatePayload);
     } catch (err: any) {
-      Logger.error(err)
-      throw { code: ResponseCodes.DATABASE_ERROR, message: ResponseMessages.ERROR } as Error
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.DATABASE_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
     }
   }
 

@@ -82,7 +82,7 @@ export const ServicesFactory = Factory
       address: faker.address.cardinalDirection(),
       userId: (await User.query().random()).id,
       districtId: (await District.query().random()).id,
-      servicesTypesSubServiceId: (await ServicesType.query().random()).id,
+      servicesTypesSubServiceId: [(await ServicesType.query().random()).id],
     }
   })
   .relation('labels', () => LabelFactory)

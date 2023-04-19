@@ -1,12 +1,12 @@
-import BaseValidator from '../BaseValidator'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import { rules, schema } from "@ioc:Adonis/Core/Validator";
+import BaseValidator from "../BaseValidator";
 
 // import { ExperienceTypes } from 'Contracts/services'
 
 export default class ServiceValidator extends BaseValidator {
   constructor(protected ctx: HttpContextContract) {
-    super()
+    super();
   }
 
   /*
@@ -31,33 +31,26 @@ export default class ServiceValidator extends BaseValidator {
   public schema = schema.create({
     userId: schema.number([
       rules.unsigned(),
-      rules.exists({ table: 'users', column: 'id' }),
+      rules.exists({ table: "users", column: "id" }),
     ]),
     // experienceType: schema.number([
     //   rules.unsigned(),
     //   rules.range(ExperienceTypes.BEFORE_ONE_YEAR, ExperienceTypes.BEFORE_TEN_YEAR),
     // ]),
-    description: schema.string({}, [
-      rules.maxLength(1024),
-      rules.minLength(5),
-    ]),
+    description: schema.string({}, [rules.maxLength(1024), rules.minLength(5)]),
     isBanned: schema.boolean.optional(),
-    servicesTypesSubServiceId: schema.number([ rules.unsigned() ]),
-    servicesTypesAttributeId: schema.number.optional([ rules.unsigned() ]),
+    subServices: schema.array().members(schema.number([rules.unsigned()])),
+    servicesTypesAttributeId: schema.number.optional([rules.unsigned()]),
     labels: schema.string.optional({}, []),
     district: schema.object().members({
-      name: schema.string({ trim: true }, [
-        rules.maxLength(255),
-      ]),
-      city: schema.string({ trim: true }, [
-        rules.maxLength(255),
-      ])
+      name: schema.string({ trim: true }, [rules.maxLength(255)]),
+      city: schema.string({ trim: true }, [rules.maxLength(255)]),
     }),
     address: schema.string({ trim: true }, [
       rules.minLength(2),
       rules.maxLength(255),
     ]),
-  })
+  });
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
@@ -70,5 +63,5 @@ export default class ServiceValidator extends BaseValidator {
    * }
    *
    */
-  public messages = this.messages
+  public messages = this.messages;
 }
