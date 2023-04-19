@@ -34,7 +34,6 @@ export default class District extends BaseModel {
    */
 
   public static search = scope((query, city: string) => {
-    console.log(city)
     query.where('city', 'ILIKE', `%${city.toLowerCase()}%`)
   })
 
