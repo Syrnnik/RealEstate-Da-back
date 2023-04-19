@@ -18,7 +18,6 @@ export default class ServicesController {
     
     try {
       payload = await request.validate(ServiceApiValidator)
-      console.log(payload)
     } catch (err: any) {
       throw new ExceptionService({
         code: ResponseCodes.VALIDATION_ERROR,
