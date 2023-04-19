@@ -1,12 +1,15 @@
 {
-  "name": "Real-estate",
+  "name": "real-estate",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "node ace serve --watch",
     "build": "node ace build --production --ignore-ts-errors",
     "start": "node server.js",
-    "migration:refresh": "node ace migration:rollback && node ace migration:run && node ace db:seed"
+    "migration:reset": "node ace migration:rollback && node ace migration:run && node ace db:seed",
+    "migration:clear": "node ace migration:rollback",
+    "migration:create": "node ace migration:run",
+    "db:fill": "node ace db:seed"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.4.1",

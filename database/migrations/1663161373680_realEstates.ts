@@ -12,8 +12,7 @@ export default class RealEstates extends BaseSchema {
 
   public async down() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumn("cadastralNumber");
-      table.dropColumn("landCadastralNumber");
+      table.dropColumns("cadastralNumber", "landCadastralNumber");
     });
   }
 }

@@ -1,13 +1,12 @@
-import Logger from '@ioc:Adonis/Core/Logger'
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import { NewsFactory } from 'Database/factories'
+import Logger from "@ioc:Adonis/Core/Logger";
+import BaseSeeder from "@ioc:Adonis/Lucid/Seeder";
 
 export default class NewsSeeder extends BaseSeeder {
-  public async run () {
+  public async run() {
     try {
-      await NewsFactory.createMany(15)
+      // await NewsFactory.createMany(15)
     } catch (err: any) {
-      Logger.error(err)
+      Logger.error(err);
     }
   }
 }

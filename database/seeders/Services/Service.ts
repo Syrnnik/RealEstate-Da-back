@@ -1,16 +1,15 @@
-import Logger from '@ioc:Adonis/Core/Logger'
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import { ServicesFactory } from 'Database/factories'
+import Logger from "@ioc:Adonis/Core/Logger";
+import BaseSeeder from "@ioc:Adonis/Lucid/Seeder";
 
 export default class ServiceSeeder extends BaseSeeder {
-  public async run () {
+  public async run() {
     try {
-      await ServicesFactory
-        .with('labels', 3)
-        .with('responses', 3)
-        .createMany(50)
+      // await ServicesFactory
+      //   .with('labels', 3)
+      //   .with('responses', 3)
+      //   .createMany(50)
     } catch (err: any) {
-      Logger.error(err)
+      Logger.error(err);
     }
   }
 }
