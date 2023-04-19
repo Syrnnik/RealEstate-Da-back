@@ -1,49 +1,49 @@
-import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import BaseSchema from "@ioc:Adonis/Lucid/Schema";
 
 export default class Conversations extends BaseSchema {
-  protected tableName = 'conversations'
+  protected tableName = "conversations";
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments("id");
 
       table
-        .integer('realEstate_id')
+        .integer("realEstate_id")
         .unsigned()
         .nullable()
-        .references('realEstates.id')
-        .onDelete('CASCADE')
+        .references("realEstates.id")
+        .onDelete("CASCADE");
 
       table
-        .integer('service_id')
+        .integer("service_id")
         .unsigned()
         .nullable()
-        .references('services.id')
-        .onDelete('CASCADE')
+        .references("services.id")
+        .onDelete("CASCADE");
 
       table
-        .integer('from_id')
+        .integer("from_id")
         .unsigned()
         .notNullable()
-        .references('users.id')
-        .onDelete('CASCADE')
+        .references("users.id")
+        .onDelete("CASCADE");
 
       table
-        .integer('to_id')
+        .integer("to_id")
         .unsigned()
         .notNullable()
-        .references('users.id')
-        .onDelete('CASCADE')
+        .references("users.id")
+        .onDelete("CASCADE");
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamp('createdAt', { useTz: true })
-      table.timestamp('updatedAt', { useTz: true })
-    })
+      table.timestamp("createdAt", { useTz: true });
+      table.timestamp("updatedAt", { useTz: true });
+    });
   }
 
-  public async down () {
-    this.schema.dropTable(this.tableName)
+  public async down() {
+    this.schema.dropTable(this.tableName);
   }
 }

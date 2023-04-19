@@ -1,11 +1,11 @@
-import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import BaseSchema from "@ioc:Adonis/Lucid/Schema";
 
 export default class Services extends BaseSchema {
-  protected tableName = 'services'
+  protected tableName = "services";
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments("id");
       // table.integer('experienceType').unsigned().notNullable().comment(`
       //   Опыт работы
       //   0 - до 1 года
@@ -13,47 +13,51 @@ export default class Services extends BaseSchema {
       //   2 - до 6 лет
       //   3 - до 10 лет
       // `)
-      table.string('description', 1024).notNullable()
-      table.boolean('isBanned').defaultTo(0).notNullable().comment('0 - нет, 1 - да')
-      table.string('address', 1024).notNullable()
+      table.string("description", 1024).notNullable();
+      table
+        .boolean("isBanned")
+        .defaultTo(0)
+        .notNullable()
+        .comment("0 - нет, 1 - да");
+      table.string("address", 1024).notNullable();
 
       table
-        .integer('user_id')
+        .integer("user_id")
         .unsigned()
         .notNullable()
-        .references('users.id')
-        .onDelete('CASCADE')
+        .references("users.id")
+        .onDelete("CASCADE");
 
       table
-        .integer('district_id')
+        .integer("district_id")
         .unsigned()
         .notNullable()
-        .references('districts.id')
-        .onDelete('CASCADE')
+        .references("districts.id")
+        .onDelete("CASCADE");
 
       table
-        .integer('servicesTypesSubService_id')
+        .integer("servicesTypesSubService_id")
         .unsigned()
         .notNullable()
-        .references('servicesTypesSubServices.id')
-        .onDelete('CASCADE')
+        .references("servicesTypesSubServices.id")
+        .onDelete("CASCADE");
 
       table
-        .integer('servicesTypesAttribute_id')
+        .integer("servicesTypesAttribute_id")
         .unsigned()
         .nullable()
-        .references('servicesTypesAttributes.id')
-        .onDelete('CASCADE')
+        .references("servicesTypesAttributes.id")
+        .onDelete("CASCADE");
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamp('createdAt', { useTz: true })
-      table.timestamp('updatedAt', { useTz: true })
-    })
+      table.timestamp("createdAt", { useTz: true });
+      table.timestamp("updatedAt", { useTz: true });
+    });
   }
 
-  public async down () {
-    this.schema.dropTable(this.tableName)
+  public async down() {
+    this.schema.dropTable(this.tableName);
   }
 }

@@ -5,7 +5,7 @@ import Estate from "App/Models/RealEstates/Estate";
 export default class EstateSeeder extends BaseSeeder {
   public async run() {
     try {
-      await Estate.createMany([
+      await Estate.updateOrCreateMany(Estate.columns[2], [
         // Квартиры Комнаты
         { name: "Квартира", realEstateTypeId: 1 },
         { name: "Комната", realEstateTypeId: 1 },
