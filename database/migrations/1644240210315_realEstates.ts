@@ -53,7 +53,7 @@ export default class RealEstates extends BaseSchema {
         1 - собственник
         2 - застройщики
         3 - агенства
-        4 - неважно
+        4 - не важно
       `);
       table.integer("saleType").unsigned().notNullable().comment(`
         1 - прямая
@@ -85,57 +85,57 @@ export default class RealEstates extends BaseSchema {
         .boolean("hasKitchenFurniture")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли кухонная мебель. 0 - нету, 1 - есть");
+        .comment("Есть ли кухонная мебель. 0 - нет, 1 - есть");
       table
         .boolean("hasFurniture")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли мебель. 0 - нету, 1 - есть");
+        .comment("Есть ли мебель. 0 - нет, 1 - есть");
       table
         .boolean("hasRefrigerator")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли холодильник. 0 - нету, 1 - есть");
+        .comment("Есть ли холодильник. 0 - нет, 1 - есть");
       table
         .boolean("hasWashingMachine")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли стиральная машина. 0 - нету, 1 - есть");
+        .comment("Есть ли стиральная машина. 0 - нет, 1 - есть");
       table
         .boolean("hasDishWasher")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли посудомоечная машина. 0 - нету, 1 - есть");
+        .comment("Есть ли посудомоечная машина. 0 - нет, 1 - есть");
       table
         .boolean("hasTv")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли телевизор. 0 - нету, 1 - есть");
+        .comment("Есть ли телевизор. 0 - нет, 1 - есть");
       table
         .boolean("hasConditioner")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли кондиционер. 0 - нету, 1 - есть");
+        .comment("Есть ли кондиционер. 0 - нет, 1 - есть");
       table
         .boolean("hasInternet")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли интернет. 0 - нету, 1 - есть");
+        .comment("Есть ли интернет. 0 - нет, 1 - есть");
       table
         .boolean("hasBathroom")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли ванна. 0 - нету, 1 - есть");
+        .comment("Есть ли ванна. 0 - нет, 1 - есть");
       table
         .boolean("hasShowerCabin")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли душевая кабина. 0 - нету, 1 - есть");
+        .comment("Есть ли душевая кабина. 0 - нет, 1 - есть");
       table
         .boolean("hasBasement")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли подвал. 0 - нету, 1 - есть");
+        .comment("Есть ли подвал. 0 - нет, 1 - есть");
       table
         .boolean("withKids")
         .defaultTo(0)
@@ -173,12 +173,12 @@ export default class RealEstates extends BaseSchema {
         .boolean("hasRamp")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли пандус. 0 - нету, 1 - есть");
+        .comment("Есть ли пандус. 0 - нет, 1 - есть");
       table
         .boolean("hasGarbage")
         .defaultTo(0)
         .notNullable()
-        .comment("Есть ли мусоропровод. 0 - нету, 1 - есть");
+        .comment("Есть ли мусоропровод. 0 - нет, 1 - есть");
       table
         .boolean("hasGroundParking")
         .defaultTo(0)
@@ -240,7 +240,7 @@ export default class RealEstates extends BaseSchema {
         2 - Дизайнерский
         3 - Без ремонта
       `);
-      table.integer("windRoseDirectionType").unsigned().nullable().comment(`
+      table.string("windRoseDirectionType").nullable().comment(`
         Тип направления по розе ветров
         0 - север
         1 - юг
@@ -273,7 +273,7 @@ export default class RealEstates extends BaseSchema {
         18 - Спорт, культура, досуг, развлечения
         19 - Хранение и транспортировка
       `);
-      table.integer("outBuildingType").unsigned().nullable().comment(`
+      table.string("outBuildingType").nullable().comment(`
         Тип хозпостроек
         0 - гараж
         1 - баня
