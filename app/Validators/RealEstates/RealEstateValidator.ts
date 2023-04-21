@@ -1,6 +1,5 @@
-import BaseValidator from "../BaseValidator";
-import { rules, schema } from "@ioc:Adonis/Core/Validator";
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import { rules, schema } from "@ioc:Adonis/Core/Validator";
 import {
   AreaType,
   BalconyTypes,
@@ -13,7 +12,6 @@ import {
   HouseTypes,
   LayoutTypes,
   LocationTypes,
-  OutBuildingTypes,
   PrepaymentTypes,
   RentalPeriodTypes,
   RentalTypes,
@@ -25,8 +23,8 @@ import {
   WCTypes,
   Window,
   WindowTypes,
-  WindRoseDirectionTypes,
 } from "Contracts/enums";
+import BaseValidator from "../BaseValidator";
 
 export default class RealEstateValidator extends BaseValidator {
   constructor(protected ctx: HttpContextContract) {
@@ -115,13 +113,11 @@ export default class RealEstateValidator extends BaseValidator {
       rules.unsigned(),
       rules.range(0, RepairTypes.NO_REPAIR),
     ]),
-    outBuildingType: schema.number.optional([
-      rules.unsigned(),
-      rules.range(0, OutBuildingTypes.OUT_BUILDING),
+    outBuildingType: schema.string.optional({ trim: true }, [
+      rules.maxLength(255),
     ]),
-    windRoseDirectionType: schema.number.optional([
-      rules.unsigned(),
-      rules.range(0, WindRoseDirectionTypes.SOUTH_WEST),
+    windRoseDirectionType: schema.string.optional({ trim: true }, [
+      rules.maxLength(255),
     ]),
     directionType: schema.number.optional([
       rules.unsigned(),

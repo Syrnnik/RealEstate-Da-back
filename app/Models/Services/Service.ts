@@ -16,6 +16,7 @@ import District from "../District";
 import Response from "../Response/Response";
 import User from "../Users/User";
 import Label from "./Label";
+import ServiceImage from "./ServiceImage";
 import ServicesTypesAttribute from "./ServicesTypesAttribute";
 import SubService from "./SubService";
 
@@ -91,6 +92,9 @@ export default class Service extends BaseModel {
 
   @hasMany(() => Response)
   public responses: HasMany<typeof Response>;
+
+  @hasMany(() => ServiceImage)
+  public images: HasMany<typeof ServiceImage>;
 
   @manyToMany(() => Label, {
     pivotTable: "labels_services",

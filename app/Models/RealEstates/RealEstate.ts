@@ -1,13 +1,5 @@
-import Estate from "./Estate";
-import User from "../Users/User";
-import District from "../District";
 import Drive from "@ioc:Adonis/Core/Drive";
-import RealEstateImage from "./RealEstateImage";
 import Database from "@ioc:Adonis/Lucid/Database";
-import CamelCaseNamingStrategy from "../../../start/CamelCaseNamingStrategy";
-import { DateTime } from "luxon";
-import { v4 as uuid } from "uuid";
-import { IMG_PLACEHOLDER } from "Config/drive";
 import {
   BaseModel,
   beforeFetch,
@@ -24,6 +16,7 @@ import {
   ModelObject,
   ModelQueryBuilderContract,
 } from "@ioc:Adonis/Lucid/Orm";
+import { IMG_PLACEHOLDER } from "Config/drive";
 import {
   AREA_TYPES,
   BALCONY_TYPES,
@@ -36,20 +29,27 @@ import {
   HOUSE_TYPES,
   LAYOUT_TYPES,
   LOCATION_TYPES,
+  OUT_BUILDING_TYPES,
   PREPAYMENT_TYPES,
   RENTAL_PERIODS_TYPES,
   RENTAL_TYPES,
   REPAIR_TYPES,
   ROOM_TYPES,
-  TRANSACTION_TYPES,
-  WC_TYPES,
-  WINDOW,
-  WINDOW_TYPES,
-  WIND_ROSE_DIRECTION_TYPES,
   SALE_TYPES,
   SELLERS_TYPES,
-  OUT_BUILDING_TYPES,
+  TRANSACTION_TYPES,
+  WC_TYPES,
+  WIND_ROSE_DIRECTION_TYPES,
+  WINDOW,
+  WINDOW_TYPES,
 } from "Config/realEstatesTypes";
+import { DateTime } from "luxon";
+import { v4 as uuid } from "uuid";
+import CamelCaseNamingStrategy from "../../../start/CamelCaseNamingStrategy";
+import District from "../District";
+import User from "../Users/User";
+import Estate from "./Estate";
+import RealEstateImage from "./RealEstateImage";
 
 export default class RealEstate extends BaseModel {
   public static namingStrategy = new CamelCaseNamingStrategy();
@@ -298,10 +298,10 @@ export default class RealEstate extends BaseModel {
   public repairType: number | undefined;
 
   @column()
-  public outBuildingType: number | undefined;
+  public outBuildingType: string | undefined;
 
   @column()
-  public windRoseDirectionType: number | undefined;
+  public windRoseDirectionType: string | undefined;
 
   @column()
   public directionType: number | undefined;
@@ -386,7 +386,7 @@ export default class RealEstate extends BaseModel {
     if (this.prepaymentType !== undefined && this.prepaymentType !== null)
       return PREPAYMENT_TYPES[this.prepaymentType];
 
-    return "Нету";
+    return "Нет";
   }
 
   @computed()
@@ -404,8 +404,18 @@ export default class RealEstate extends BaseModel {
 
   @computed()
   public get outBuildingTypeForUser(): string {
-    if (this.outBuildingType !== undefined && this.outBuildingType !== null)
-      return OUT_BUILDING_TYPES[this.outBuildingType];
+    if (this.outBuildingType !== undefined && this.outBuildingType !== null) {
+      let outBuildingTypesForUser: Array<string> = [];
+      const buildingTypes: Array<string> = this.outBuildingType.split(",");
+      for (let key in buildingTypes) {
+        let type = buildingTypes[key];
+        if (type) outBuildingTypesForUser.push(OUT_BUILDING_TYPES[type]);
+      }
+
+      if (outBuildingTypesForUser.length > 1)
+        return outBuildingTypesForUser.join(", ");
+      return outBuildingTypesForUser.toString();
+    }
 
     return "";
   }
@@ -519,8 +529,18 @@ export default class RealEstate extends BaseModel {
     if (
       this.windRoseDirectionType !== undefined &&
       this.windRoseDirectionType !== null
-    )
-      return WIND_ROSE_DIRECTION_TYPES[this.windRoseDirectionType];
+    ) {
+      let windRoseDirectionTypes: Array<string> = [];
+      const windTypes: Array<string> = this.windRoseDirectionType.split(",");
+      for (let key in windTypes) {
+        let type = windTypes[key];
+        if (type) windRoseDirectionTypes.push(WIND_ROSE_DIRECTION_TYPES[type]);
+      }
+
+      if (windRoseDirectionTypes.length > 1)
+        return windRoseDirectionTypes.join(", ");
+      return windRoseDirectionTypes.toString();
+    }
 
     return "Не установлено";
   }
