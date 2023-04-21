@@ -28,9 +28,12 @@ export default class UsersController {
       await item.load(
         "services",
         (query: ModelQueryBuilderContract<typeof Service>) => {
-          query.preload("labels").preload("subServices", (query) => {
-            query.preload("service");
-          });
+          query
+            .preload("labels")
+            .preload("subServices", (query) => {
+              query.preload("service");
+            })
+            .preload("images");
         }
       );
 

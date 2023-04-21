@@ -42,7 +42,7 @@ export default class ServicesController {
 
     try {
       const item: Service = await ServiceService.get(id, {
-        relations: ["labels", "district", "subServices"],
+        relations: ["labels", "district", "subServices", "images"],
       });
 
       return response
