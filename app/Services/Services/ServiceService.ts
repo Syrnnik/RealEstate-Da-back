@@ -7,6 +7,7 @@ import SubService from "App/Models/Services/SubService";
 import User from "App/Models/Users/User";
 import ServiceApiValidator from "App/Validators/Api/Services/ServiceValidator";
 import ServiceValidator from "App/Validators/Services/ServiceValidator";
+import { SERVICE_PATH } from "Config/drive";
 import { PaginationConfig } from "Contracts/database";
 import { ResponseCodes, ResponseMessages } from "Contracts/response";
 import { Error, PaginateConfig, ServiceConfig } from "Contracts/services";
@@ -95,23 +96,14 @@ export default class ServiceService extends BaseService {
   ): Promise<Service> {
     let item: Service;
     let districtId: District["id"];
+    let imageBasePath: string;
     let subServices: Array<number> = payload.subServices;
     const { district, ...servicePayload } = payload;
 
     district.name = district.name.toLowerCase();
     district.city = district.city.toLowerCase();
 
-    // try {
-    //   await this.checkUserServiceType(payload.userId, payload.servicesTypeId)
-    // } catch (err: Error | any) {
-    //   throw err
-    // }
-
-    // if (!trx)
-    //   trx = await Database.transaction()
-
     try {
-      // districtId = (await DistrictService.create(payload.district.name, payload.district.city, { trx })).id
       districtId = (
         await DistrictService.create(
           payload.district.name,
@@ -132,9 +124,9 @@ export default class ServiceService extends BaseService {
         { ...servicePayload, districtId },
         { client: trx }
       );
-    } catch (err: any) {
-      // await trx.rollback()
 
+      imageBasePath = `${SERVICE_PATH}/${item.id}`;
+    } catch (err: any) {
       Logger.error(err);
       throw {
         code: ResponseCodes.DATABASE_ERROR,
@@ -175,8 +167,6 @@ export default class ServiceService extends BaseService {
       try {
         await item.related("labels").attach(labelsId);
       } catch (err: any) {
-        // await trx.rollback()
-
         Logger.error(err);
         throw {
           code: ResponseCodes.DATABASE_ERROR,
@@ -185,7 +175,24 @@ export default class ServiceService extends BaseService {
       }
     }
 
-    // await trx.commit()
+    try {
+      if (payload.images) {
+        for (const imageItem of payload.images) {
+          if (imageItem) {
+            await imageItem.moveToDisk(`${imageBasePath}/images`);
+            await item.related("images").create({
+              image: `${imageBasePath}/images/${imageItem.fileName}`,
+            });
+          }
+        }
+      }
+    } catch (err: any) {
+      Logger.error(err);
+      throw {
+        code: ResponseCodes.SERVER_ERROR,
+        message: ResponseMessages.ERROR,
+      } as Error;
+    }
     return item;
   }
 
@@ -202,17 +209,7 @@ export default class ServiceService extends BaseService {
     district.name = district.name.toLowerCase();
     district.city = district.city.toLowerCase();
 
-    // try {
-    //   await this.checkUserServiceType(payload.userId, payload.servicesTypeId)
-    // } catch (err: Error | any) {
-    //   throw err
-    // }
-
-    // if (!config.trx)
-    //   config.trx = await Database.transaction()
-
     try {
-      // districtId = (await DistrictService.create(payload.district.name, payload.district.city, { trx })).id
       districtId = (
         await DistrictService.create(
           payload.district.name,
@@ -231,8 +228,6 @@ export default class ServiceService extends BaseService {
     try {
       item = await this.get(id, config);
     } catch (err: any) {
-      // await config.trx.rollback()
-
       Logger.error(err);
       throw {
         code: ResponseCodes.DATABASE_ERROR,
@@ -258,8 +253,6 @@ export default class ServiceService extends BaseService {
       try {
         await item.related("labels").detach();
       } catch (err: any) {
-        // await config.trx.rollback()
-
         Logger.error(err);
         throw {
           code: ResponseCodes.SERVER_ERROR,
@@ -285,8 +278,6 @@ export default class ServiceService extends BaseService {
       try {
         await item.related("labels").attach(labelsId);
       } catch (err: any) {
-        // await config.trx.rollback()
-
         Logger.error(err);
         throw {
           code: ResponseCodes.DATABASE_ERROR,
@@ -298,11 +289,8 @@ export default class ServiceService extends BaseService {
     try {
       item = await item.merge({ ...servicePayload, districtId }).save();
 
-      // await config.trx.commit()
       return item;
     } catch (err: any) {
-      // await config.trx.rollback()
-
       Logger.error(err);
       throw {
         code: ResponseCodes.SERVER_ERROR,
