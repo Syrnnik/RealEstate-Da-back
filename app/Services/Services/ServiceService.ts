@@ -3,6 +3,7 @@ import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
 import District from "App/Models/District";
 import Label from "App/Models/Services/Label";
 import Service from "App/Models/Services/Service";
+import ServicesTypesSubService from "App/Models/Services/ServicesTypesSubService";
 import SubService from "App/Models/Services/SubService";
 import User from "App/Models/Users/User";
 import ServiceApiValidator from "App/Validators/Api/Services/ServiceValidator";
@@ -14,10 +15,11 @@ import { Error, PaginateConfig, ServiceConfig } from "Contracts/services";
 import BaseService from "../BaseService";
 import DistrictService from "../DistrictService";
 import LabelService from "./LabelService";
+import ServicesTypeService from "./ServicesTypeService";
 
 // import { removeLastLetter } from '../../../helpers'
 
-type Columns = typeof Service["columns"][number];
+type Columns = (typeof Service)["columns"][number];
 type ValidatorPayload = ServiceValidator["schema"]["props"];
 
 export default class ServiceService extends BaseService {
@@ -387,25 +389,25 @@ export default class ServiceService extends BaseService {
               query = query.whereIn("districtId", payload[key]);
               break;
 
-            // case "servicesTypeId":
-            //   const subServices: ServicesTypesSubService[] =
-            //     await ServicesTypeService.getAllSubServicesTypes(payload[key]!);
-            //   const subServicesIds: ServicesTypesSubService["id"][] =
-            //     subServices.map((item: ServicesTypesSubService) => item.id);
+            case "servicesTypeId":
+              const subServices: ServicesTypesSubService[] =
+                await ServicesTypeService.getAllSubServicesTypes(payload[key]!);
+              const subServicesIds: ServicesTypesSubService["id"][] =
+                subServices.map((item: ServicesTypesSubService) => item.id);
 
-            //   query = query.whereHas("subService", (query) => {
-            //     query.whereIn("id", subServicesIds);
-            //   });
-            //   break;
+              query = query.whereHas("subServices", (query) => {
+                query.whereIn("id", subServicesIds);
+              });
+              break;
 
-            // case "subServicesTypes":
-            //   query = query.whereHas("subService", (query) => {
-            //     for (let item of payload[key]!) {
-            //       query.where("id", item);
-            //     }
-            //   });
+            case "subServicesTypes":
+              query = query.whereHas("subServices", (query) => {
+                for (let item of payload[key]!) {
+                  query.where("id", item);
+                }
+              });
 
-            //   break;
+              break;
 
             case "attributesTypes":
               query = query.whereHas("attribute", (query) => {

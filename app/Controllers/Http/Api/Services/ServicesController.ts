@@ -38,7 +38,7 @@ export default class ServicesController {
   }
 
   public async get({ response, params }: HttpContextContract) {
-    const id: Service["id"] = params.serviceTypeId;
+    const id: Service["id"] = params.id;
 
     try {
       const item: Service = await ServiceService.get(id, {
