@@ -443,7 +443,9 @@ export default class RealEstateService extends BaseService {
     try {
       let query = RealEstate.query()
         .preload("estate")
-        .where("address", "ILIKE", `%${city}%`);
+        .whereHas("district", (query) => {
+          query.withScopes((scope) => scope.search(city));
+        });
 
       query = this.filter(payload, query);
 
