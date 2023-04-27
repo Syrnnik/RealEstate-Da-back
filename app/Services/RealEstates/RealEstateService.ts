@@ -31,7 +31,7 @@ import BaseService from "../BaseService";
 import DistrictService from "../DistrictService";
 import UserService from "../Users/UserService";
 
-type Columns = typeof RealEstate["columns"][number];
+type Columns = (typeof RealEstate)["columns"][number];
 type ValidatorPayload = RealEstateValidator["schema"]["props"];
 type GetMethodConfig = ServiceConfig<RealEstate> & {
   isForApi?: boolean;
@@ -443,9 +443,7 @@ export default class RealEstateService extends BaseService {
     try {
       let query = RealEstate.query()
         .preload("estate")
-        .whereHas("district", (query) => {
-          query.where("city", city);
-        });
+        .where("address", "ILIKE", `%${city}%`);
 
       query = this.filter(payload, query);
 
