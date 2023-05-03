@@ -180,7 +180,6 @@ export default class RealEstateService extends BaseService {
 
     try {
       // item = await RealEstate.create({ ...realEstatePayload, image, districtId }, { client: trx })
-      console.log(realEstatePayload)
       item = await RealEstate.create({
         ...realEstatePayload,
         image,
