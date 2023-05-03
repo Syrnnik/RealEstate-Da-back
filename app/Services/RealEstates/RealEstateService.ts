@@ -441,11 +441,11 @@ export default class RealEstateService extends BaseService {
     if (!payload.limit) payload.limit = 15;
 
     try {
-      let query = RealEstate.query()
-        .preload("estate")
-        .whereHas("district", (query) => {
-          query.withScopes((scope) => scope.search(city));
-        });
+      let query = RealEstate.query().preload("estate");
+      // .whereHas("district", (query) => {
+      //   query.withScopes((scopes) => scopes.search(city));
+      // });
+      // .where("address", city);
 
       query = this.filter(payload, query);
 
