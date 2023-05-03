@@ -396,7 +396,7 @@ export default class ServiceService extends BaseService {
                 subServices.map((item: ServicesTypesSubService) => item.id);
 
               query = query.whereHas("subServices", (query) => {
-                query.whereIn("id", subServicesIds);
+                query.whereIn("serviceTypeSubServiceId", subServicesIds);
               });
               break;
 
