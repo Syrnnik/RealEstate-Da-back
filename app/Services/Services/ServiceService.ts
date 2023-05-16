@@ -3,7 +3,6 @@ import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
 import District from "App/Models/District";
 import Label from "App/Models/Services/Label";
 import Service from "App/Models/Services/Service";
-import ServicesTypesSubService from "App/Models/Services/ServicesTypesSubService";
 import SubService from "App/Models/Services/SubService";
 import User from "App/Models/Users/User";
 import ServiceApiValidator from "App/Validators/Api/Services/ServiceValidator";
@@ -15,7 +14,6 @@ import { Error, PaginateConfig, ServiceConfig } from "Contracts/services";
 import BaseService from "../BaseService";
 import DistrictService from "../DistrictService";
 import LabelService from "./LabelService";
-import ServicesTypeService from "./ServicesTypeService";
 
 // import { removeLastLetter } from '../../../helpers'
 
@@ -390,23 +388,15 @@ export default class ServiceService extends BaseService {
               break;
 
             case "servicesTypeId":
-              const subServices: ServicesTypesSubService[] =
-                await ServicesTypeService.getAllSubServicesTypes(payload[key]!);
-              const subServicesIds: ServicesTypesSubService["id"][] =
-                subServices.map((item: ServicesTypesSubService) => item.id);
-
               query = query.whereHas("subServices", (query) => {
-                query.whereIn("serviceTypeSubServiceId", subServicesIds);
+                query.where("serviceId", payload[key]!);
               });
               break;
 
             case "subServicesTypes":
               query = query.whereHas("subServices", (query) => {
-                for (let item of payload[key]!) {
-                  query.where("id", item);
-                }
+                query.whereIn("serviceTypeSubServiceId", payload[key]!);
               });
-
               break;
 
             case "attributesTypes":

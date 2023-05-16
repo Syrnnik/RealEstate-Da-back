@@ -1,12 +1,12 @@
-import ApiValidator from '../ApiValidator'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import ApiValidator from "../ApiValidator";
+import { rules, schema } from "@ioc:Adonis/Core/Validator";
+import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 // import { ExperienceTypes } from 'Contracts/services'
 
 export default class ServiceValidator extends ApiValidator {
   constructor(protected ctx: HttpContextContract) {
-    super()
+    super();
   }
 
   /*
@@ -30,29 +30,33 @@ export default class ServiceValidator extends ApiValidator {
    */
   public schema = schema.create({
     ...this.preParsedSchema,
-    // experienceTypes: schema.array.optional().members(schema.number([
-    //   rules.unsigned(),
-    //   rules.range(ExperienceTypes.BEFORE_ONE_YEAR, ExperienceTypes.BEFORE_TEN_YEAR),
-    // ])),
-    subServicesTypes: schema.array.optional().members(schema.number([ rules.unsigned() ])),
-    attributesTypes: schema.array.optional().members(schema.number([ rules.unsigned() ])),
+    subServicesTypes: schema.array
+      .optional()
+      .members(schema.number([rules.unsigned()])),
+    attributesTypes: schema.array
+      .optional()
+      .members(schema.number([rules.unsigned()])),
     servicesTypeId: schema.number.optional([
       rules.unsigned(),
-      rules.exists({ table: 'servicesTypes', column: 'id' }),
+      rules.exists({ table: "servicesTypes", column: "id" }),
     ]),
-    labels: schema.array.optional().members(schema.number([
-      rules.unsigned(),
-      rules.exists({ table: 'labels', column: 'id' })
-    ])),
-    rating: schema.enum.optional(['asc', 'desc'] as const),
-    districts: schema.array.optional().members(schema.number([
-      rules.unsigned(),
-    ])),
+    labels: schema.array
+      .optional()
+      .members(
+        schema.number([
+          rules.unsigned(),
+          rules.exists({ table: "labels", column: "id" }),
+        ])
+      ),
+    rating: schema.enum.optional(["asc", "desc"] as const),
+    districts: schema.array
+      .optional()
+      .members(schema.number([rules.unsigned()])),
     address: schema.string.optional({ trim: true }, [
       rules.minLength(2),
       rules.maxLength(255),
     ]),
-  })
+  });
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
@@ -65,5 +69,5 @@ export default class ServiceValidator extends ApiValidator {
    * }
    *
    */
-  public messages = this.messages
+  public messages = this.messages;
 }
