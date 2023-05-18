@@ -387,16 +387,15 @@ export default class ServiceService extends BaseService {
               query = query.whereIn("districtId", payload[key]);
               break;
 
-            case "servicesTypeId":
-              query = query.whereHas("subServices", (query) => {
-                query.where("serviceId", payload[key]!);
-              });
+            case "serviceTypeId":
+              query = query.where("serviceTypeId", payload[key]!);
               break;
 
             case "subServicesTypes":
-              query = query.whereHas("subServices", (query) => {
-                query.whereIn("serviceTypeSubServiceId", payload[key]!);
-              });
+              if (payload[key]?.length !== 0)
+                query = query.whereHas("subServices", (query) => {
+                  query.whereIn("serviceTypeSubServiceId", payload[key]!);
+                });
               break;
 
             case "attributesTypes":

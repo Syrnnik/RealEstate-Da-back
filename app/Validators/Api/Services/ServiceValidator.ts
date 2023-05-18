@@ -1,6 +1,6 @@
-import ApiValidator from "../ApiValidator";
-import { rules, schema } from "@ioc:Adonis/Core/Validator";
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import { rules, schema } from "@ioc:Adonis/Core/Validator";
+import ApiValidator from "../ApiValidator";
 
 // import { ExperienceTypes } from 'Contracts/services'
 
@@ -36,7 +36,7 @@ export default class ServiceValidator extends ApiValidator {
     attributesTypes: schema.array
       .optional()
       .members(schema.number([rules.unsigned()])),
-    servicesTypeId: schema.number.optional([
+    serviceTypeId: schema.number.optional([
       rules.unsigned(),
       rules.exists({ table: "servicesTypes", column: "id" }),
     ]),
