@@ -21,11 +21,13 @@ export default class Services extends BaseSchema {
         .comment("0 - нет, 1 - да");
       table.string("address", 1024).notNullable();
 
+      table.integer("user_id").unsigned().notNullable().references("users.id");
+
       table
-        .integer("user_id")
+        .integer("serviceType_id")
         .unsigned()
         .notNullable()
-        .references("users.id")
+        .references("servicesTypes.id")
         .onDelete("CASCADE");
 
       table
