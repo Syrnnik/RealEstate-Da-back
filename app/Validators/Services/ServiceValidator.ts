@@ -39,6 +39,7 @@ export default class ServiceValidator extends BaseValidator {
     // ]),
     description: schema.string({}, [rules.maxLength(1024), rules.minLength(5)]),
     isBanned: schema.boolean.optional(),
+    serviceTypeId: schema.number([rules.unsigned()]),
     subServices: schema.array().members(schema.number([rules.unsigned()])),
     servicesTypesAttributeId: schema.number.optional([rules.unsigned()]),
     labels: schema.string.optional({}, []),

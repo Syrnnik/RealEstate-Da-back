@@ -17,6 +17,7 @@ import Response from "../Response/Response";
 import User from "../Users/User";
 import Label from "./Label";
 import ServiceImage from "./ServiceImage";
+import ServicesType from "./ServicesType";
 import ServicesTypesAttribute from "./ServicesTypesAttribute";
 import SubService from "./SubService";
 
@@ -29,6 +30,7 @@ export default class Service extends BaseModel {
     "description",
     "isBanned",
     "userId",
+    "serviceTypeId",
     "servicesTypesAttributeId",
     "createdAt",
     "updatedAt",
@@ -51,6 +53,9 @@ export default class Service extends BaseModel {
 
   @column({ columnName: "user_id" })
   public userId: User["id"];
+
+  @column({ columnName: "serviceType_id" })
+  public serviceTypeId: ServicesType["id"];
 
   @column({ columnName: "district_id" })
   public districtId: District["id"];
@@ -80,6 +85,9 @@ export default class Service extends BaseModel {
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>;
+
+  @belongsTo(() => ServicesType)
+  public service: BelongsTo<typeof ServicesType>;
 
   @belongsTo(() => District)
   public district: BelongsTo<typeof District>;
