@@ -33,10 +33,6 @@ export default class ServiceValidator extends BaseValidator {
       rules.unsigned(),
       rules.exists({ table: "users", column: "id" }),
     ]),
-    // experienceType: schema.number([
-    //   rules.unsigned(),
-    //   rules.range(ExperienceTypes.BEFORE_ONE_YEAR, ExperienceTypes.BEFORE_TEN_YEAR),
-    // ]),
     description: schema.string({}, [rules.maxLength(1024), rules.minLength(5)]),
     isBanned: schema.boolean.optional(),
     serviceTypeId: schema.number([rules.unsigned()]),
