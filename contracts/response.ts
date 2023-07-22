@@ -47,6 +47,10 @@ export enum ResponseMessages {
   QUESTION_DELETED = 'Вопрос был успешно удален!',
   QUESTION_NOT_FOUNT = 'Вопрос не найден!',
 
+  CALL_RIELTOR_CREATED = 'Ваш запрос был отправлен, спасибо!',
+  CALL_RIELTOR_DELETED = 'Запрос был успешно удален!',
+  CALL_RIELTOR_NOT_FOUNT = 'Запрос не найден!',
+
   REAL_ESTATE_TYPES_CREATED = 'Тип недвижимости был успешно создана и опубликован!',
   REAL_ESTATE_TYPES_UPDATED = 'Тип недвижимости был успешно обновлен!',
   REAL_ESTATE_TYPES_DELETED = 'Тип недвижимости был успешно удален!',

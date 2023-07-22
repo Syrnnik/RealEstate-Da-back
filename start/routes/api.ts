@@ -5,6 +5,8 @@ Route.group(() => {
 
   Route.post("/questions", "Api/QuestionsController.create");
 
+  Route.post("/call-rieltor", "Api/CallRieltorController.create");
+  
   Route.post("/banners", "Api/BannersController.getAll");
 
   Route.post("/cities", "Api/CitiesController.getAll");
